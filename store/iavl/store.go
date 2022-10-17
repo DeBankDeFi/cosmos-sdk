@@ -51,7 +51,7 @@ func LoadStore(db dbm.DB, logger log.Logger, key types.StoreKey, id types.Commit
 // provided DB. An error is returned if the version fails to load, or if called with a positive
 // version on an empty tree.
 func LoadStoreWithInitialVersion(db dbm.DB, logger log.Logger, key types.StoreKey, id types.CommitID, lazyLoading bool, initialVersion uint64, cacheSize int) (types.CommitKVStore, error) {
-	tree, err := iavl.NewMutableTreeWithOpts(db, cacheSize, &iavl.Options{InitialVersion: initialVersion})
+	tree, err := iavl.NewMutableTreeWithOpts(db, cacheSize, &iavl.Options{InitialVersion: initialVersion, Stat: &iavl.Statistics{}})
 	if err != nil {
 		return nil, err
 	}
@@ -200,9 +200,17 @@ func (st *Store) Set(key, value []byte) {
 	st.tree.Set(key, value)
 }
 
+func (st *Store) reportCacheStats() {
+	telemetry.SetGauge(float32(st.tree.GetIAVLNodeCacheHitCnt()), "store", "iavl", "node", "cache", "hit")
+	telemetry.SetGauge(float32(st.tree.GetIAVLNodeCacheHitCnt()), "store", "iavl", "node", "cache", "miss")
+	telemetry.SetGauge(float32(st.tree.GetIAVLNodeFastCacheHitCnt()), "store", "iavl", "node", "fastcache", "hit")
+	telemetry.SetGauge(float32(st.tree.GetIAVLNodeFastCacheHitCnt()), "store", "iavl", "node", "fastcache", "miss")
+}
+
 // Implements types.KVStore.
 func (st *Store) Get(key []byte) []byte {
 	defer telemetry.MeasureSince(time.Now(), "store", "iavl", "get")
+	defer st.reportCacheStats()
 	value, err := st.tree.Get(key)
 	if err != nil {
 		panic(err)

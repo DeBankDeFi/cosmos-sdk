@@ -33,6 +33,11 @@ type (
 		GetImmutable(version int64) (*iavl.ImmutableTree, error)
 		SetInitialVersion(version uint64)
 		Iterator(start, end []byte, ascending bool) (types.Iterator, error)
+
+		GetIAVLNodeCacheHitCnt() uint64
+		GetIAVLNodeCacheMissCnt() uint64
+		GetIAVLNodeFastCacheHitCnt() uint64
+		GetIAVLNodeFastCacheMissCnt() uint64
 	}
 
 	// immutableTree is a simple wrapper around a reference to an iavl.ImmutableTree
@@ -65,6 +70,23 @@ func (it *immutableTree) DeleteVersions(_ ...int64) error {
 
 func (it *immutableTree) SetInitialVersion(_ uint64) {
 	panic("cannot call 'SetInitialVersion' on an immutable IAVL tree")
+}
+
+func (it *immutableTree) GetIAVLNodeCacheHitCnt() uint64 {
+	panic("cannot call 'GetIAVLNodeCacheHitCnt' on an immutable IAVL tree")
+}
+
+func (it *immutableTree) GetIAVLNodeCacheMissCnt() uint64 {
+
+	panic("cannot call 'GetIAVLNodeCacheMissCnt' on an immutable IAVL tree")
+}
+func (it *immutableTree) GetIAVLNodeFastCacheHitCnt() uint64 {
+
+	panic("cannot call 'GetIAVLNodeFastCacheHitCnt' on an immutable IAVL tree")
+}
+func (it *immutableTree) GetIAVLNodeFastCacheMissCnt() uint64 {
+
+	panic("cannot call 'GetIAVLNodeFastCacheMissCnt' on an immutable IAVL tree")
 }
 
 func (it *immutableTree) VersionExists(version int64) bool {
