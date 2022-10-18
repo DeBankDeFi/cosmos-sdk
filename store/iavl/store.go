@@ -201,7 +201,6 @@ func (st *Store) Set(key, value []byte) {
 }
 
 func (st *Store) reportCacheStats() {
-	fmt.Printf("iavl store report cache stats, hit: %d, miss: %d\n", st.tree.GetIAVLNodeCacheHitCnt(), st.tree.GetIAVLNodeCacheMissCnt())
 	telemetry.SetGauge(float32(st.tree.GetIAVLNodeCacheHitCnt()), "store", "iavl", "node", "cache", "hit")
 	telemetry.SetGauge(float32(st.tree.GetIAVLNodeCacheMissCnt()), "store", "iavl", "node", "cache", "miss")
 	telemetry.SetGauge(float32(st.tree.GetIAVLNodeFastCacheHitCnt()), "store", "iavl", "node", "fastcache", "hit")
@@ -216,7 +215,6 @@ func (st *Store) Get(key []byte) []byte {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("iavl store get\n")
 	return value
 }
 
