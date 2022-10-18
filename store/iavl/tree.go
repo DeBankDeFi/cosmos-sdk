@@ -72,23 +72,6 @@ func (it *immutableTree) SetInitialVersion(_ uint64) {
 	panic("cannot call 'SetInitialVersion' on an immutable IAVL tree")
 }
 
-func (it *immutableTree) GetIAVLNodeCacheHitCnt() uint64 {
-	panic("cannot call 'GetIAVLNodeCacheHitCnt' on an immutable IAVL tree")
-}
-
-func (it *immutableTree) GetIAVLNodeCacheMissCnt() uint64 {
-
-	panic("cannot call 'GetIAVLNodeCacheMissCnt' on an immutable IAVL tree")
-}
-func (it *immutableTree) GetIAVLNodeFastCacheHitCnt() uint64 {
-
-	panic("cannot call 'GetIAVLNodeFastCacheHitCnt' on an immutable IAVL tree")
-}
-func (it *immutableTree) GetIAVLNodeFastCacheMissCnt() uint64 {
-
-	panic("cannot call 'GetIAVLNodeFastCacheMissCnt' on an immutable IAVL tree")
-}
-
 func (it *immutableTree) VersionExists(version int64) bool {
 	return it.Version() == version
 }
