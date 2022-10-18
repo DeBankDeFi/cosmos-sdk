@@ -33,6 +33,11 @@ type (
 		GetImmutable(version int64) (*iavl.ImmutableTree, error)
 		SetInitialVersion(version uint64)
 		Iterator(start, end []byte, ascending bool) (types.Iterator, error)
+
+		GetIAVLNodeCacheHitCnt() uint64
+		GetIAVLNodeCacheMissCnt() uint64
+		GetIAVLNodeFastCacheHitCnt() uint64
+		GetIAVLNodeFastCacheMissCnt() uint64
 	}
 
 	// immutableTree is a simple wrapper around a reference to an iavl.ImmutableTree
