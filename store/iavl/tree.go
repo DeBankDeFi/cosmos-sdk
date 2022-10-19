@@ -38,6 +38,10 @@ type (
 		GetIAVLNodeCacheMissCnt() uint64
 		GetIAVLNodeFastCacheHitCnt() uint64
 		GetIAVLNodeFastCacheMissCnt() uint64
+		GetIAVLNodeCacheLen() uint64
+		GetIAVLNodeCacheCapacity() uint64
+		GetIAVLNodeFastCacheLen() uint64
+		GetIAVLNodeFastCacheCapacity() uint64
 	}
 
 	// immutableTree is a simple wrapper around a reference to an iavl.ImmutableTree

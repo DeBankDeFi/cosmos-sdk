@@ -205,6 +205,11 @@ func (st *Store) reportCacheStats() {
 	telemetry.SetGauge(float32(st.tree.GetIAVLNodeCacheMissCnt()), "store", "iavl", "node", "cache", "miss")
 	telemetry.SetGauge(float32(st.tree.GetIAVLNodeFastCacheHitCnt()), "store", "iavl", "node", "fastcache", "hit")
 	telemetry.SetGauge(float32(st.tree.GetIAVLNodeFastCacheMissCnt()), "store", "iavl", "node", "fastcache", "miss")
+
+	telemetry.SetGauge(float32(st.tree.GetIAVLNodeCacheLen()), "store", "iavl", "node", "cache", "len")
+	telemetry.SetGauge(float32(st.tree.GetIAVLNodeCacheCapacity()), "store", "iavl", "node", "cache", "capacity")
+	telemetry.SetGauge(float32(st.tree.GetIAVLNodeFastCacheLen()), "store", "iavl", "node", "fastcache", "len")
+	telemetry.SetGauge(float32(st.tree.GetIAVLNodeFastCacheCapacity()), "store", "iavl", "node", "fastcache", "capacity")
 }
 
 // Implements types.KVStore.
