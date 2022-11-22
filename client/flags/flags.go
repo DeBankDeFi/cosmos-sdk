@@ -78,6 +78,8 @@ const (
 	// Tendermint logging flags
 	FlagLogLevel  = "log_level"
 	FlagLogFormat = "log_format"
+
+	FlagRemoteAddr = "remote_addr"
 )
 
 // LineBreak can be included in a command list to provide a blank line

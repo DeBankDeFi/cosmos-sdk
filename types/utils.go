@@ -7,12 +7,15 @@ import (
 	"time"
 
 	dbm "github.com/tendermint/tm-db"
+	"github.com/tendermint/tm-db/remotedb"
 )
 
 var (
 	// This is set at compile time. Could be cleveldb, defaults is goleveldb.
 	DBBackend = ""
 	backend   = dbm.GoLevelDBBackend
+
+	RemoteAddr = ""
 )
 
 func init() {
@@ -91,8 +94,20 @@ func NewLevelDB(name, dir string) (db dbm.DB, err error) {
 			err = fmt.Errorf("couldn't create db: %v", r)
 		}
 	}()
-
-	return dbm.NewDB(name, backend, dir)
+	fmt.Printf("NewLevelDB name=%v dir=%v backend=%v RemoteAddr=%v", name, dir, backend, RemoteAddr)
+	if RemoteAddr != "" {
+		remoteDb, err := remotedb.NewRemoteDB(RemoteAddr)
+		if err != nil {
+			return remoteDb, err
+		}
+		err = remoteDb.InitRemote(&remotedb.Init{Dir: dir, Name: name, Type: "goleveldb"})
+		if err != nil {
+			return remoteDb, err
+		}
+		return remoteDb, err
+	} else {
+		return dbm.NewDB(name, backend, dir)
+	}
 }
 
 // copy bytes
