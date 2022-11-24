@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"os"
 	"time"
 
 	ics23 "github.com/confio/ics23/go"
@@ -165,7 +166,13 @@ func (st *Store) GetPruning() types.PruningOptions {
 
 // VersionExists returns whether or not a given version is stored.
 func (st *Store) VersionExists(version int64) bool {
-	return st.tree.VersionExists(version)
+	if st.tree.VersionExists(version) {
+		return true
+	}
+	if os.Getenv("READONLY") != "" {
+		return true
+	}
+	return false
 }
 
 // GetAllVersions returns all versions in the iavl tree

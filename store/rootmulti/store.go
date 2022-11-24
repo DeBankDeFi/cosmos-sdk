@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"math"
+	"os"
 	"sort"
 	"strings"
 	"sync"
@@ -386,6 +387,9 @@ func (rs *Store) LastCommitID() types.CommitID {
 		return types.CommitID{
 			Version: GetLatestVersion(rs.db),
 		}
+	}
+	if os.Getenv("READONLY") != "" {
+		rs.lastCommitInfo, _ = getCommitInfo(rs.db, GetLatestVersion(rs.db))
 	}
 
 	return rs.lastCommitInfo.CommitID()
