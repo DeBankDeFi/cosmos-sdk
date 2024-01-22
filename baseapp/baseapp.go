@@ -343,6 +343,11 @@ func (app *BaseApp) LastCommitID() storetypes.CommitID {
 	return app.cms.LastCommitID()
 }
 
+// RollbackToVersion rollback the state version
+func (app *BaseApp) RollbackToVersion(version int64) error {
+	return app.cms.RollbackToVersion(version)
+}
+
 // LastBlockHeight returns the last committed block height.
 func (app *BaseApp) LastBlockHeight() int64 {
 	return app.cms.LastCommitID().Version
