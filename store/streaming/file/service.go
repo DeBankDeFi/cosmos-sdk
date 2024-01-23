@@ -176,6 +176,11 @@ func (fss *StreamingService) ListenDeliverTx(ctx sdk.Context, req abci.RequestDe
 	return dstFile.Close()
 }
 
+
+func (fss *StreamingService) ListenCommit(ctx sdk.Context, res abci.ResponseCommit) error {
+	return nil
+}
+
 func (fss *StreamingService) openDeliverTxFile() (*os.File, error) {
 	fileName := fmt.Sprintf("block-%d-tx-%d", fss.currentBlockNumber, fss.currentTxIndex)
 	if fss.filePrefix != "" {
