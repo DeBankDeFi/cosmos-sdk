@@ -314,6 +314,13 @@ func (app *BaseApp) Commit() (res abci.ResponseCommit) {
 	commitID := app.cms.Commit()
 	app.logger.Info("commit synced", "commit", fmt.Sprintf("%X", commitID))
 
+	// call the hooks with the Commit message
+	for _, streamingListener := range app.abciListeners {
+		if err := streamingListener.ListenCommit(app.deliverState.ctx, res); err != nil {
+			panic(fmt.Errorf("Commit listening hook failed, height: %d, err: %w", header.Height, err))
+		}
+	}
+
 	// Reset the Check state to the latest committed.
 	//
 	// NOTE: This is safe because Tendermint holds a lock on the mempool for

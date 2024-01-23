@@ -18,6 +18,8 @@ type ABCIListener interface {
 	ListenEndBlock(ctx types.Context, req abci.RequestEndBlock, res abci.ResponseEndBlock) error
 	// ListenDeliverTx updates the steaming service with the latest DeliverTx messages
 	ListenDeliverTx(ctx types.Context, req abci.RequestDeliverTx, res abci.ResponseDeliverTx) error
+	// ListenCommit updates the steaming service with the latest Commit event
+	ListenCommit(ctx types.Context, res abci.ResponseCommit) error
 }
 
 // StreamingService interface for registering WriteListeners with the BaseApp and updating the service with the ABCI messages using the hooks
