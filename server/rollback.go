@@ -5,8 +5,13 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/server/types"
+	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
 	tmcmd "github.com/tendermint/tendermint/cmd/cometbft/commands"
+)
+
+const (
+	FlagTargetBlockHeight = "target-block-height"
 )
 
 // NewRollbackCmd creates a command to rollback tendermint and multistore state by one height.
@@ -37,7 +42,9 @@ application.
 				return fmt.Errorf("failed to rollback tendermint state: %w", err)
 			}
 			// rollback the multistore
-
+			if h := cast.ToInt64(ctx.Viper.Get(FlagTargetBlockHeight)); h > 0 {
+				height = h
+			}
 			if err := app.CommitMultiStore().RollbackToVersion(height); err != nil {
 				return fmt.Errorf("failed to rollback to version: %w", err)
 			}
@@ -48,5 +55,6 @@ application.
 	}
 
 	cmd.Flags().String(flags.FlagHome, defaultNodeHome, "The application home directory")
+	cmd.Flags().Int(FlagTargetBlockHeight, -1, "The target block height")
 	return cmd
 }
