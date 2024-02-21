@@ -643,14 +643,15 @@ func (app *BaseApp) createQueryContext(height int64, prove bool) (sdk.Context, e
 	}
 
 	lastBlockHeight := qms.LatestVersion()
-
-	if height > lastBlockHeight {
-		return sdk.Context{},
-			sdkerrors.Wrap(
-				sdkerrors.ErrInvalidHeight,
-				"cannot query with height in the future; please provide a valid height",
-			)
-	}
+	/*
+		if height > lastBlockHeight {
+			return sdk.Context{},
+				sdkerrors.Wrap(
+					sdkerrors.ErrInvalidHeight,
+					"cannot query with height in the future; please provide a valid height",
+				)
+		}
+	*/
 
 	// when a client did not provide a query height, manually inject the latest
 	if height == 0 {
@@ -665,14 +666,16 @@ func (app *BaseApp) createQueryContext(height int64, prove bool) (sdk.Context, e
 			)
 	}
 
-	//cacheMS, err := app.cms.CacheMultiStoreWithVersion(height)
 	cacheMS, err := qms.CacheMultiStoreWithVersion(height)
 	if err != nil {
-		return sdk.Context{},
-			sdkerrors.Wrapf(
+		// try load from iavl state
+		cacheMS, err = app.cms.CacheMultiStoreWithVersion(height)
+		if err != nil {
+			return sdk.Context{}, sdkerrors.Wrapf(
 				sdkerrors.ErrInvalidRequest,
 				"failed to load state at height %d; %s (latest height: %d)", height, err, lastBlockHeight,
 			)
+		}
 	}
 
 	// branch the commit-multistore for safety
